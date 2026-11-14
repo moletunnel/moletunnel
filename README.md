@@ -1,125 +1,150 @@
-# Mole — Privacy-First Xray VPN & Proxy Client for Android
+<div align="center">
 
-**Mole** is a free, privacy-first **VPN and proxy client** powered by **Xray-core**. It is built with **Flutter** for Android (with Windows and Linux desktop builds in system-proxy mode), and focuses on **anti-censorship**, **internet freedom**, and **secure browsing** — with no accounts, no tracking, and no analytics.
+<a href="https://moletunnel.co"><img src="https://moletunnel.co/og.png" alt="Mole — free Xray-core VPN and proxy client" width="760"></a>
 
-Mole supports the modern proxy protocols used to **bypass internet censorship and DPI (Deep Packet Inspection)**: **VLESS (with REALITY and XTLS Vision), VMess, Trojan, Shadowsocks, and Hysteria2**.
+# Mole
+
+**A free, privacy-first Xray-core VPN & proxy client for Android, iPhone, iPad, macOS, Windows and Linux.**
+Bring your own server or subscription — VLESS · REALITY · VMess · Trojan · Shadowsocks · Hysteria2.
+
+[![Latest release](https://img.shields.io/github/v/release/moletunnel/moletunnel?label=release&color=c74a14)](https://github.com/moletunnel/moletunnel/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/moletunnel/moletunnel/total?color=4f6b3a)](https://github.com/moletunnel/moletunnel/releases)
+[![Website](https://img.shields.io/badge/web-moletunnel.co-2a2118)](https://moletunnel.co)
+[![Telegram](https://img.shields.io/badge/Telegram-moletunnel-26A5E4?logo=telegram&logoColor=white)](https://t.me/moletunnel)
+
+[Download](#-download) · [Features](#-features) · [Platforms](#-platforms) · [FAQ](#-faq) · [Privacy](https://moletunnel.co/privacy/) · [Docs](https://docs.moletunnel.co)
+
+</div>
 
 ---
 
-## Why Mole?
+Mole is a **client**, not a VPN service: it has no servers of its own and no account. You connect it to
+your own server or to a subscription from a provider you choose, and your traffic goes straight from
+your device to that server — nobody, including us, is in between. It is built on the battle-tested
+**Xray-core** engine and is designed for **anti-censorship**: REALITY, uTLS fingerprints, XHTTP, Hysteria2
+and traffic masks get through DPI firewalls where ordinary VPNs are blocked.
 
-- 🔒 **Privacy first** — no sign-up, no account, no telemetry. Your servers and settings stay on your device.
-- 🚀 **Xray-core engine** — the battle-tested core behind the most effective censorship-circumvention tools.
-- 🛡️ **Anti-censorship built in** — REALITY, uTLS fingerprints, TLS ClientHello fragmentation, SNI tricks, and padding to evade DPI and firewalls.
-- 📱 **Native Android VPN** — full-device tunnel via Android VpnService, with always-on VPN support.
-- 🌍 **Multilingual** — English, Persian (Farsi, RTL), Armenian, Russian, and Chinese.
+## 📥 Download
 
----
+| Platform | Get it | Notes |
+|---|---|---|
+| **Android** | [**Google Play**](https://play.google.com/store/apps/details?id=com.mole.client) · [APK](https://github.com/moletunnel/moletunnel/releases/latest) | Android 7+ · full-device VPN |
+| **iPhone & iPad** | [**App Store**](https://apps.apple.com/app/id6833924268) | iOS 15+ · full-device VPN |
+| **macOS** | [`.dmg`](https://github.com/moletunnel/moletunnel/releases/latest) | Apple Silicon |
+| **Windows** | [`Setup.exe` / portable `.zip`](https://github.com/moletunnel/moletunnel/releases/latest) | x64 |
+| **Linux** | [`.deb` · `.rpm` · `.AppImage` · `.tar.gz`](https://github.com/moletunnel/moletunnel/releases/latest) | x64 |
 
-## Supported Protocols
+All desktop installers and the Android APK are attached to each
+[**release**](https://github.com/moletunnel/moletunnel/releases/latest), together with a `SHA256SUMS.txt`.
+
+<details>
+<summary><b>First launch on macOS / Windows, and verifying a download</b></summary>
+
+- **macOS** — the app is not notarized yet, so Gatekeeper blocks the first launch. Open the `.dmg`,
+  drag Mole to **Applications**, then right-click the app → **Open** → **Open** once.
+- **Windows** — the installer is unsigned, so SmartScreen warns on first run: **More info** → **Run anyway**.
+- **Android APK** — if you previously installed a GitHub APK older than **1.0.29**, uninstall it once
+  first: releases are now signed with the same key as Google Play, so the old build can't be upgraded in place.
+- **Verify** — download `SHA256SUMS.txt` next to your file, then run
+  `sha256sum -c SHA256SUMS.txt --ignore-missing` (macOS: `shasum -a 256 -c SHA256SUMS.txt --ignore-missing`).
+
+</details>
+
+## 🚀 Quick start
+
+1. Install Mole for your platform.
+2. Tap **＋** and add your server: paste a **share link** (`vless://`, `vmess://`, `trojan://`, `ss://`,
+   `hy2://`), paste a **subscription URL**, scan a **QR code**, or import from the **clipboard**.
+3. Pick a server (or let Mole auto-select the fastest one) and press the **connect** button.
+
+## ✨ Features
+
+### Protocols & transports
 
 | Protocol | Highlights |
 |---|---|
-| **VLESS** | REALITY, XTLS Vision flow (`xtls-rprx-vision`), TLS, uTLS fingerprints |
-| **VMess** | Standard URI links, legacy base64 links, and raw JSON configs |
+| **VLESS** | REALITY, XTLS Vision (`xtls-rprx-vision`), TLS, uTLS fingerprints |
+| **VMess** | Standard URI links, legacy base64 links, raw JSON configs |
 | **Trojan** | TLS-based, firewall-resistant |
 | **Shadowsocks** | AEAD ciphers incl. Shadowsocks-2022 (`2022-blake3-*`), SIP002 links |
-| **Hysteria2** | QUIC-based, fast on lossy networks, `hy2://` links |
+| **Hysteria2** | QUIC-based, fast on lossy networks, **Salamander** obfuscation, Brutal bandwidth control |
 
-### Transports & Security
+- Transports: **TCP**, **WebSocket**, **gRPC**, **XHTTP** (including stream-one over **HTTP/3**)
+- Security: **TLS**, **REALITY** (public key, short ID, SpiderX), uTLS fingerprints, custom SNI and ALPN
+- **XMC traffic mask** — disguises the connection as Minecraft traffic where game traffic is allowed
+- **Mux** multiplexing and traffic **sniffing** (HTTP / TLS / QUIC)
 
-- **TCP (raw)**, **WebSocket (ws)**, **gRPC**, and **XHTTP (SplitHTTP)** transports
-- **TLS**, **REALITY** (public key, short ID, SpiderX), and plain modes
-- **uTLS fingerprint** spoofing (Chrome and others), custom SNI, ALPN
-- **Mux multiplexing** and traffic **sniffing** (HTTP / TLS / QUIC)
+### Servers & subscriptions
+- Import by **share link**, **QR code**, **clipboard** or **raw Xray JSON**
+- **Subscriptions** with auto-detection: plain link lists, **base64**, **Clash YAML**, **SIP008** and full
+  **Xray JSON** profiles (multi-server balancers with automatic best-server selection)
+- Quota and expiry tracking, custom User-Agent per subscription, background refresh (Android)
+- Search, sort and filter; **latency tests** (HTTP end-to-end, TCP connect) with one-tap **Test All**
 
----
+### Routing & DNS
+- **Per-app split tunneling** on Android — include or exclude any installed app
+- Custom **domain rules** (proxy / direct / block), region presets, **bypass LAN**, **block IPv6 leaks**
+- **DNS-over-HTTPS**, **DNS-over-TLS** or plain DNS, **FakeIP**, presets (Cloudflare, AdGuard, Quad9,
+  NextDNS, OpenDNS…)
+- On-device filtering: **block ads, malware, trackers and adult content**
 
-## Key Features
-
-### Server Management
-- Import servers by **share link**, **QR code scan**, **clipboard**, or **raw Xray JSON**
-- **Subscription support** with auto-detection: plain link lists, **base64**, **Clash YAML**, **SIP008**, and full JSON subscriptions
-- Subscription **quota and expiry tracking** (upload / download / total / expiration)
-- Auto-update subscriptions on launch, custom User-Agent per subscription
-- Search, sort (name / latency / protocol), filter, pin favorites, bulk delete
-- **Share servers** back out as links or QR codes
-
-### Speed & Latency Testing
-- **HTTP ping** (true end-to-end test through the tunnel), **TCP connect**, and **ICMP** ping
-- **Test All** servers at once and **auto-pick the best server**
-
-### Smart Routing & Split Tunneling
-- **Per-app VPN (split tunneling)** — blacklist or whitelist any installed app
-- Custom **domain rules**: Proxy / Direct / Block per domain
-- Region presets for **Iran, China, and Russia** routing rules
-- **Bypass LAN** and **block IPv6 leaks**
-- GeoIP / GeoSite rule files with one-tap in-app updates
-
-### Secure DNS
-- **DNS-over-HTTPS (DoH)** and **DNS-over-TLS (DoT)**
-- **FakeIP** mode for faster, leak-resistant resolution
-- Built-in presets: **Cloudflare, AdGuard, AdGuard Family, Quad9, NextDNS, OpenDNS** and custom servers
-- DNS filtering: **block ads, malware, trackers, and adult content**
-
-### Anti-Censorship / DPI Evasion
+### Anti-censorship
 - Evasion profiles: **Light / Moderate / Aggressive**
-- **TLS ClientHello fragmentation** with tunable packet size and delay
-- Packet **padding** and **mixed-case SNI**
+- **TLS ClientHello fragmentation**, packet **padding** and **mixed-case SNI**
 
-### Everyday Usability
-- One-tap **connect dial** with live connection timer and **real-time upload/download speed**
-- Live **log viewer** with filtering and export
-- **Light / Dark / System themes**
-- VPN engine runs in a **separate Android process** for stability; `allowBackup` disabled for privacy
+### Everyday use
+- One-tap **connect** with a live timer and real-time upload/download speed
+- Live **log viewer**, **light / dark / system** themes
+- **5 languages**: English, Persian (RTL), Armenian, Russian, Chinese
 
----
+## 💻 Platforms
 
-## Platforms
-
-| Platform | Status |
+| Platform | Mode |
 |---|---|
-| **Android** | ✅ Full VPN (TUN) support — primary platform |
-| **Windows** | ✅ Proxy mode (local SOCKS/HTTP + system proxy) |
-| **Linux** | ✅ Proxy mode (GNOME system proxy) |
-| **iOS / macOS** | 🚧 In development (Network Extension groundwork in place) |
+| **Android** | ✅ Full-device VPN (VpnService), always-on VPN, per-app split tunneling |
+| **iPhone & iPad** | ✅ Full-device VPN (Apple Network Extension) |
+| **macOS** | ✅ System-proxy mode, plus optional **system-wide VPN mode** (asks for admin / Touch ID) |
+| **Windows** | ✅ System-proxy mode, plus optional **system-wide VPN mode** (asks for Administrator) |
+| **Linux** | ✅ System-proxy mode, plus optional **system-wide VPN mode** (asks via `pkexec`) |
 
----
+## 🔒 Privacy
 
-## Who Is Mole For?
+Mole has **no backend, no account, no analytics and no ads**. Your servers, subscriptions and settings are
+stored only on your device, and your traffic goes only to the servers you add. Details:
+**[moletunnel.co/privacy](https://moletunnel.co/privacy/)**.
 
-Mole is for anyone who needs **uncensored, private internet access**:
-
-- Users behind **national firewalls** (Iran, China, Russia and beyond) looking for a **free VPN alternative** that actually works against DPI
-- Privacy-conscious users who want a **no-account, no-log client** they fully control
-- Self-hosters running their own **VLESS / REALITY / Hysteria2 / Shadowsocks servers**
-- Anyone migrating from clients like **v2rayNG, Happ, Nekobox, or Hiddify** who wants a clean, modern Flutter UI
-
----
-
-## Frequently Asked Questions
+## ❓ FAQ
 
 **Is Mole free?**
-Yes. Mole is a free client. You connect to your own servers or servers from any subscription provider you trust.
+Yes. Mole is free on every platform. You connect to your own server or to any compatible subscription.
+
+**Is Mole a VPN service? Do you sell servers?**
+No. Mole is only the client. You bring a server configuration — your own, or from a provider you trust.
 
 **Does Mole collect my data?**
-No. There is no account system, no analytics, and no telemetry. Configurations are stored locally (with encrypted storage for sensitive data).
+No. There is no account, no analytics and no telemetry, and we run no servers your data could reach.
 
-**Does Mole work against DPI censorship?**
-Yes — that is its core purpose. REALITY, uTLS fingerprints, XHTTP, Hysteria2, and TLS fragmentation are all designed to defeat modern DPI systems.
+**Does it work against DPI censorship?**
+That is its core purpose. REALITY, uTLS fingerprints, XHTTP, Hysteria2 with Salamander, the XMC mask and
+ClientHello fragmentation are all designed to get through modern DPI.
 
-**Which VPN protocols does Mole support?**
-VLESS (REALITY / XTLS Vision), VMess, Trojan, Shadowsocks (including Shadowsocks-2022), and Hysteria2.
+**Will my provider's subscription work?**
+If it gives you VLESS, VMess, Trojan, Shadowsocks or Hysteria2 links — or a Clash, SIP008, base64 or
+Xray JSON subscription — yes.
 
-**Can I choose which apps use the VPN?**
-Yes — per-app split tunneling lets you include or exclude any installed Android app.
+**Where is the source code?**
+This repository hosts the **official releases and downloads**. Mole is developed in a separate repository.
+
+## 💬 Support
+
+- **Telegram:** [t.me/moletunnel](https://t.me/moletunnel) — news and support
+- **Docs:** [docs.moletunnel.co](https://docs.moletunnel.co)
+- **Bugs & feature requests:** [open an issue](https://github.com/moletunnel/moletunnel/issues)
+- **Email:** contact@ghyan.dev
 
 ---
 
-## Keywords
-
-`vpn client` · `xray core` · `xray client android` · `vless client` · `reality protocol` · `xtls vision` · `vmess` · `trojan protocol` · `shadowsocks client` · `hysteria2 client` · `anti-censorship` · `bypass gfw` · `bypass internet censorship` · `dpi bypass` · `free vpn android` · `v2ray client` · `proxy client flutter` · `split tunneling android` · `dns over https` · `privacy vpn no logs`
-
----
-
-*Mole is an independent open client for the Xray-core ecosystem. It does not provide servers — you bring your own or use any compatible subscription.*
+<div align="center">
+<sub>Mole is published by GH Tech, LLC. It is an independent client for the Xray-core ecosystem and does
+not provide VPN servers.</sub>
+</div>
